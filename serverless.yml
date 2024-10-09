@@ -1,0 +1,24 @@
+service: demo
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  stage: ${self:custom.stage}
+  region: ap-south-1
+
+custom:
+  stage: ${opt:stage, 'dev'}
+
+functions:
+  function1:
+    handler: index.handler
+    environment:
+      DB_HOST: ${ssm:/${self:custom.stage}/DB_HOST}
+      DB_USER_NAME: ${ssm:/${self:custom.stage}/DB_USER_NAME}
+      DB_PASSWORD: ${ssm:/${self:custom.stage}/DB_PASSWORD}
+    events:
+      - http:
+          path: hello
+          method: get    
+
