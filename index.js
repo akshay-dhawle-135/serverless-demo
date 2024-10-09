@@ -6,7 +6,6 @@ module.exports.handler = async (event) => {
   console.log('DB_HOST', DB_HOST);
   console.log('DB_USER_NAME', DB_USER_NAME);
   console.log('DB_PASSWORD', DB_PASSWORD);
-  console.log('DB_PASSWORD', DB_PASSWORD);
 
   return {
     statusCode: 200,
