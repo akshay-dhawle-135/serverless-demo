@@ -14,11 +14,22 @@ jobs:
         node-version: [18.x]
     steps:
       - uses: actions/checkout@v3
+
       - name: Set up Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
+
       - run: npm ci --force
+
+      # Add this step to install TypeScript globally
+      - name: Install TypeScript
+        run: npm install -g typescript
+
+      # Compile TypeScript to JavaScript
+      - name: Build TypeScript
+        run: tsc
+
       - name: Serverless deploy to dev
         uses: serverless/github-action@v3.2
         with:
