@@ -1,23 +1,63 @@
-service: demo
-frameworkVersion: '3'
+service: todo-app
 
 provider:
   name: aws
   runtime: nodejs18.x
-  stage: ${self:custom.stage}
   region: ap-south-1
-
-custom:
   stage: ${opt:stage, 'dev'}
+  environment:
+    MONGODB_URI: ${env:MONGODB_URI, '${ssm:/todoapp/${self:provider.stage}/MONGODB_URI}'}
+    JWT_SECRET: ${env:JWT_SECRET, '${ssm:/todoapp/${self:provider.stage}/JWT_SECRET}'}
+
+useDotenv: true
+
+plugins:
+  - serverless-offline
+  - serverless-dotenv-plugin
 
 functions:
-  function1:
-    handler: index.handler
-    environment:
-      DB_HOST: ${ssm:/${self:custom.stage}/DB_HOST}
-      DB_USER_NAME: ${ssm:/${self:custom.stage}/DB_USER_NAME}
-      DB_PASSWORD: ${ssm:/${self:custom.stage}/DB_PASSWORD}
+  authorizer:
+    handler: src/handlers/authorizer.handler
+
+  loginUser:
+    handler: src/handlers/auth.loginUser
     events:
       - http:
-          path: hello
-          method: get    
+          path: auth/login
+          method: post
+  registerUser:
+    handler: src/handlers/auth.registerUser
+    events:
+      - http:
+          path: auth/register
+          method: post
+  createTodo:
+    handler: src/handlers/todo.createTodo
+    events:
+      - http:
+          path: todos
+          method: post
+          authorizer: authorizer
+  getTodos:
+    handler: src/handlers/todo.getTodos
+    events:
+      - http:
+          path: todos
+          method: get
+          authorizer: authorizer
+
+  updateTodo:
+    handler: src/handlers/todo.updateTodo
+    events:
+      - http:
+          path: todos/{id}
+          method: put
+          authorizer: authorizer
+
+  deleteTodo:
+    handler: src/handlers/todo.deleteTodo
+    events:
+      - http:
+          path: todos/{id}
+          method: delete
+          authorizer: authorizer

@@ -16,5 +16,22 @@
   "bugs": {
     "url": "https://github.com/akshay-dhawle-135/serverless-demo/issues"
   },
-  "homepage": "https://github.com/akshay-dhawle-135/serverless-demo#readme"
+  "homepage": "https://github.com/akshay-dhawle-135/serverless-demo#readme",
+  "dependencies": {
+    "@types/mongoose": "^5.11.97",
+    "@types/node": "^22.8.0",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.5",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.7.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.145",
+    "@types/bcryptjs": "^2.4.6",
+    "serverless-offline": "^14.3.3",
+    "@types/jsonwebtoken": "^9.0.7",
+    "serverless-dotenv-plugin": "^6.0.0"
+  }
 }
